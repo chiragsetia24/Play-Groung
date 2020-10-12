@@ -5,9 +5,7 @@ import com.playing.Play.Ground.common.UriEndpoints;
 import com.playing.Play.Ground.serivce.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(UriEndpoints.PLAY_BASE_URI)
@@ -19,17 +17,20 @@ public class PlayRunController {
 
     @Autowired
     @Qualifier(value = "play")
-    private final RunService runService1;
+    private RunService runService1;
 
-    public PlayRunController(RunService runService1) {
-        this.runService1 = runService1;
-    }
 
-    @GetMapping(UriEndpoints.RUN_PLAY)
+    @PostMapping(UriEndpoints.RUN_PLAY)
     public Play runPlay() {
-        if(runService.equals(runService1)) {
+        if (runService.equals(runService1)) {
             System.out.println("same service");
         }
         return runService1.run(new Play());
+    }
+
+    @GetMapping(UriEndpoints.RUN_PLAY)
+    public Play getPlay(@RequestParam(required = false, defaultValue = "1") String a) {
+        Play play = runService1.getById(Integer.parseInt(a));
+        return play;
     }
 }

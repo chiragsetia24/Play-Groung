@@ -6,4 +6,5 @@ public interface RunService {
 
     Play run( Play play);
 
+    Play getById(int a);
 }

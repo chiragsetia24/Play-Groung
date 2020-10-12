@@ -5,7 +5,10 @@ import com.playing.Play.Ground.controllers.PlayRunController;
 import com.playing.Play.Ground.repos.PlayRepo;
 import com.playing.Play.Ground.serivce.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("play")
 public class RunServiceImpl implements RunService {
@@ -25,6 +28,13 @@ public class RunServiceImpl implements RunService {
             System.out.println("same");
         }
         return save(play);
+    }
+
+    @Cacheable(value = "Play", key = "#a", unless = "#result==null")
+    @Override
+    public Play getById(int a) {
+        Optional<Play> play = playRepo.findById((long)a);
+        return play.orElse(null);
     }
 
     private Play save(Play play) {
